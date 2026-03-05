@@ -24,12 +24,13 @@ class Figure(BaseModel):
 
 
 class Citation(BaseModel):
-    cite_key: str
+    """A citation in the paper."""
+    key: str
     title: str
     authors: list[str] = Field(default_factory=list)
     year: Optional[int] = None
-    venue: str = ""
-    arxiv_id: Optional[str] = None
+    venue: Optional[str] = None
+    url: Optional[str] = None
     bibtex: str = ""
 
 
@@ -57,4 +58,5 @@ class WritingOutput(BaseModel):
     draft: PaperDraft
     review_comments: list[str] = Field(default_factory=list)
     revision_notes: str = ""
+    quality_checks_passed: dict[str, bool] = Field(default_factory=dict)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))

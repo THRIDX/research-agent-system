@@ -3,9 +3,16 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
-from typing import Optional
+from typing import Any, Optional
 
 from pydantic import BaseModel, Field
+
+
+class AblationStudy(BaseModel):
+    """A configuration for ablation study."""
+    name: str
+    description: str
+    config_changes: dict[str, Any] = Field(default_factory=dict)
 
 
 class ExperimentStep(BaseModel):
@@ -41,4 +48,9 @@ class PlanningOutput(BaseModel):
     plan: ExperimentPlan
     risks: list[str] = Field(default_factory=list)
     mitigations: list[str] = Field(default_factory=list)
+    ablation_studies: list[AblationStudy] = Field(default_factory=list)
+    rejected: bool = False
+    rejection_reason: Optional[str] = None
+    hyperparameters: dict[str, Any] = Field(default_factory=dict)
+    random_seeds: list[int] = Field(default=[42, 123, 456])
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
